@@ -1,4 +1,134 @@
+#include <iostream>
+#include <fstream>
+#include <string>
 
+using namespace std;
+
+void createAccount() {
+ string user_password, user_id;
+ cout<<"Please Enter your User id: \n";
+cin>> user_id;
+cout<<"Please Enter Your User password: \n";
+cin>> user_password;
+//store data in the file below
+ 
+std::ofstream outFile("dataBase_details.txt", std::ios::app);
+if(outFile.is_open()) {
+outFile <<user_id<< " " <<user_password<< std::endl;
+
+outFile.close();
+cout<<"Thank You! Your Account has been Created!\n";
+
+}
+else {
+    cerr <<"Error!!!! Account NOT Created" << endl;
+
+}
+}
+// prompts the user to input login details
+bool Login() {
+string user_id, user_password, storedUser_id, storedUser_password;
+cout<<"Please Enter User ID: \n";
+cin>> user_id;
+cout<<"Please Enter User Password: \n";
+cin>> user_password;
+// checks and verify whether the entered Details are correct and Account Exists
+ifstream inFile("dataBase_details.txt");
+if (inFile.is_open()) {
+    while(inFile >> storedUser_id >> storedUser_password){
+if (user_id == storedUser_id && user_password == storedUser_password) {
+    inFile.close();
+    return true; //login sucessful  
+}
+    }
+    inFile.close();
+
+} else {
+    cout << "***LOGIN FAILED!***" << endl; // if the login failed
+
+}
+return false; //login failed
+}
+
+int main() {
+string option;
+double balance = 0.0;
+double amount;
+
+while (true){ 
+cout<<"Hi! Welcome to ATM Machine! \n"; 
+cout<<"Please Select an Option From the Menu Below: \n";
+cout <<"l. Login\nc. Create Account\nq. quit\n";
+cin>> option;
+
+if (option == "2" || option == "c") {
+    createAccount();
+    continue; 
+} else if (option == "1" || option == "l") {
+     {
+        if (Login()) {
+            cout << "Access Granted!"<< endl;
+
+while (true) {
+
+cout<<"choose an option Below\n d. Deposit\n w. Withdraw\n r. Request Balance\n q. Quit\n";
+cin>> option;
+if(option == "d"){
+   cout<<"Amount of Deposit: \n";
+    cin>> amount;
+    if (amount>0) { balance += amount;
+cout<<"Your New Balance is: $"<<balance<<" \n";
+}
+
+} else if (option == "w") {
+cout<<"Amount of withdrawal: \n";
+    cin>> amount;
+    if (amount > 0) {
+    if (amount <= balance){ balance -= amount;
+    cout<<"Your new balance is: $"<<balance<<" \n";
+    } else { cout<<"insufficient Balance\n";
+    }
+
+    }
+}
+else if (option == "r") {
+    cout<<" Your Balance is : $"<<balance<<" \n";
+}
+    else if (option == "q") {
+        cout<<"Exiting program\n";
+        break;
+    }
+    else{
+            cout << "Invalid option.\n";
+
+    }
+
+}
+
+
+
+continue;
+}
+      
+         else {
+            continue; //go back to menu after user not found or failed
+        }
+        
+}
+}
+ else if ( option == "3" || option == "q") {
+    cout <<" Exiting The Program..." << endl;
+    break; // breaks the program 
+}
+else  { 
+    cout<<" Invalid Selection. Please select 1, 2 and 3." << endl;
+}
+
+     return 0;
+
+
+}
+}
 
 
 
